@@ -1,0 +1,13 @@
+## Ansible playbook for archiving network configs and appending current datetime.
+---
+- name: Archive Configurations
+  hosts: all
+  gather_facts: no
+  connection: local
+
+  tasks:
+   - name: Backup Running-Config
+     ios_config:
+       backup: yes
+       backup_options:
+         dir_path: /home/matt/backups
