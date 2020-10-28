@@ -1,0 +1,24 @@
+## Ansible playbook - Get network facts using network_cli mode, and save show running-config to disk.
+---
+- name: Show Run and Gather Facts
+  hosts: all
+  gather_facts: yes
+  connection: network_cli
+
+  tasks:
+   - name: VIEW ALL Ansible_network OS Version
+     debug:
+       var: ansible_net_version
+
+   - name: Get Running-Configuration
+     block:
+     - name: ios_cmd - show running
+       ios_command:
+         commands: show running-config
+       register: ios_cmd
+
+
+     - name: Copy Running config to folder
+       copy:
+         content: "{{ ios_cmd.stdout[0] }}"
+         dest: "/home/matt/backups/{{ inventory_hostname }}.txt"
